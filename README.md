@@ -6,6 +6,6 @@ On the homepage, you can see open PRs ranked by a "review worthy" score that is 
 
 You can filter PRs by date, by scope and type, or search by title.
 
-You can go in the settings to change the weights for the for the final score.
+You can go in the settings to change the weights for the final score.
 
 Note: this is still somewhat of a work in progress
