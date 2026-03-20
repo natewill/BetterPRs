@@ -186,6 +186,16 @@ export default async function RepoPage(props: PageProps) {
         {/* Last refreshed */}
         <p className="mb-4 text-sm text-subtle">
           Last refreshed {formatLastRefreshed(repo.lastRefreshedAt)}
+          <span className="mx-2">·</span>
+          made by{" "}
+          <a
+            href="https://natewilliamsdev.vercel.app"
+            target="_blank"
+            rel="noreferrer"
+            className="text-body underline underline-offset-2 hover:text-heading"
+          >
+            nate williams
+          </a>
         </p>
 
         <RepoDashboard
