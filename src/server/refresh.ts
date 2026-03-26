@@ -5,6 +5,7 @@ import { assert } from "@/lib/assert";
 import { getDb } from "@/lib/db/client";
 import {
   authors,
+  ignoredPullRequests,
   issues,
   prAiAnalysis,
   prDetailSnapshots,
@@ -795,6 +796,25 @@ export async function refreshRepoInternal(
       }
     }
     const selectedOpenPrs = openPrs.filter((pr) => isSelectedPr(pr, selection));
+    const ignoredRows = await db
+      .select({ githubPrNumber: ignoredPullRequests.githubPrNumber })
+      .from(ignoredPullRequests)
+      .where(eq(ignoredPullRequests.repoId, repoId));
+    const ignoredPrNumbers = new Set(ignoredRows.map((row) => row.githubPrNumber));
+
+    if (ignoredRows.length > 0) {
+      await db
+        .delete(pullRequests)
+        .where(
+          and(
+            eq(pullRequests.repoId, repoId),
+            inArray(
+              pullRequests.githubPrNumber,
+              ignoredRows.map((row) => row.githubPrNumber),
+            ),
+          ),
+        );
+    }
 
     const existingOpenRows = await db
       .select({
@@ -916,6 +936,9 @@ export async function refreshRepoInternal(
     if (selectedOpenPrs.length > 0) {
       await runWithConcurrency(selectedOpenPrs, INGEST_CONCURRENCY, async (pr) => {
         try {
+          if (ignoredPrNumbers.has(pr.number)) {
+            return;
+          }
           summary.processedPrs += 1;
           const filteredOut = isTeamMember(pr.user.login, settings.teamMembersJson);
           if (filteredOut) {

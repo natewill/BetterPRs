@@ -135,6 +135,25 @@ export const pullRequests = pgTable(
   }),
 );
 
+export const ignoredPullRequests = pgTable(
+  "ignored_pull_requests",
+  {
+    id: serial("id").primaryKey(),
+    repoId: integer("repo_id")
+      .notNull()
+      .references(() => repos.id, { onDelete: "cascade" }),
+    githubPrNumber: integer("github_pr_number").notNull(),
+    reason: text("reason").notNull().default("manual"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    uniqueIgnoredPrPerRepo: uniqueIndex("ignored_pull_requests_repo_pr_number_unique").on(
+      table.repoId,
+      table.githubPrNumber,
+    ),
+  }),
+);
+
 export const prIssueLinks = pgTable(
   "pr_issue_links",
   {
