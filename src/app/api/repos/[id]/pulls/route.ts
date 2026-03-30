@@ -10,7 +10,7 @@ type RouteContext = {
 const scopeFilterSchema = z.union([z.literal("all"), z.string().min(1)]);
 const typeFilterSchema = z.union([z.literal("all"), z.string().min(1)]);
 
-function formatUpdatedAt(value: Date): string {
+function formatCreatedAt(value: Date): string {
   const monthNames = [
     "Jan",
     "Feb",
@@ -68,7 +68,7 @@ export async function GET(request: Request, context: RouteContext) {
         deletions: row.pr.deletions,
         changedFiles: row.pr.changedFiles,
         linkedIssueNumbersJson: row.pr.linkedIssueNumbersJson,
-        updatedAtText: formatUpdatedAt(row.pr.updatedAt),
+        createdAtText: formatCreatedAt(row.pr.createdAt),
       },
       score: row.score
         ? {

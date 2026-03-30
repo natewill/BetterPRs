@@ -48,7 +48,7 @@ function formatLastRefreshed(value: Date | null): string {
   return `${hours} hours and ${mins} mins ago`;
 }
 
-function formatUpdatedAt(value: Date): string {
+function formatCreatedAt(value: Date): string {
   const monthNames = [
     "Jan",
     "Feb",
@@ -141,7 +141,7 @@ export default async function RepoPage(props: PageProps) {
       deletions: row.pr.deletions,
       changedFiles: row.pr.changedFiles,
       linkedIssueNumbersJson: row.pr.linkedIssueNumbersJson,
-      updatedAtText: formatUpdatedAt(row.pr.updatedAt),
+      createdAtText: formatCreatedAt(row.pr.createdAt),
     },
     score: row.score
       ? {

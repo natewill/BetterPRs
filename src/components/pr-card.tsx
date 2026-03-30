@@ -19,7 +19,7 @@ type PrCardProps = {
     deletions: number;
     changedFiles: number;
     linkedIssueNumbersJson: number[];
-    updatedAtText: string;
+    createdAtText: string;
   };
   finalScore: number;
   scoreBreakdown: ScoreBreakdown;
@@ -100,7 +100,7 @@ export function PrCard(props: PrCardProps) {
           <span className="text-xs text-subtle">·</span>
           <span className="text-subtle text-xs">@{props.pr.authorLogin}</span>
           <span className="text-xs text-subtle">·</span>
-          <span className="text-subtle text-xs">last updated {props.pr.updatedAtText}</span>
+          <span className="text-subtle text-xs">created {props.pr.createdAtText}</span>
           <span className="text-xs text-subtle">·</span>
           <span className="text-xs text-score-high">+{props.pr.additions}</span>
           <span className="text-xs text-score-low">−{props.pr.deletions}</span>

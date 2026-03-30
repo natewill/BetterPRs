@@ -20,7 +20,7 @@ type PullRow = {
     deletions: number;
     changedFiles: number;
     linkedIssueNumbersJson: number[];
-    updatedAtText: string;
+    createdAtText: string;
   };
   score: { finalScore: number; scoreBreakdownJson: Record<string, number> } | null;
   ai: { beforeOpeningSummary: string } | null;
