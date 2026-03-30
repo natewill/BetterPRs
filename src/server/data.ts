@@ -217,7 +217,7 @@ export async function getRankedPrs(repoId: number, filters: PrListFilters) {
   const startDate = windowStartDate(filters.window);
 
   const conditions = [eq(pullRequests.repoId, repoId), eq(pullRequests.state, "open")];
-  conditions.push(gte(pullRequests.updatedAt, startDate));
+  conditions.push(gte(pullRequests.createdAt, startDate));
 
   if (!filters.includeFiltered) {
     conditions.push(eq(pullRequests.filteredOut, false));
@@ -241,7 +241,7 @@ export async function getRankedPrs(repoId: number, filters: PrListFilters) {
     .leftJoin(prScores, eq(prScores.prId, pullRequests.id))
     .leftJoin(prAiAnalysis, eq(prAiAnalysis.prId, pullRequests.id))
     .where(and(...conditions))
-    .orderBy(sql`${prScores.finalScore} desc nulls last`, desc(pullRequests.updatedAt));
+    .orderBy(sql`${prScores.finalScore} desc nulls last`, desc(pullRequests.createdAt));
 
   if (!filters.search.trim()) {
     return rows;
