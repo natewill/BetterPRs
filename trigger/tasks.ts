@@ -9,7 +9,7 @@ import {
 export const refreshActiveRepos = schedules.task({
   id: "refresh-active-repos",
   cron: {
-    pattern: "0 */6 * * *",
+    pattern: "0 6,9,12,15,18 * * *",
     timezone: "America/New_York",
   },
   run: async () => {
