@@ -816,7 +816,7 @@ export async function refreshRepoInternal(
         );
     }
 
-    const existingOpenRows = await db
+    let existingOpenRows = await db
       .select({
         id: pullRequests.id,
         githubPrNumber: pullRequests.githubPrNumber,
@@ -825,6 +825,32 @@ export async function refreshRepoInternal(
       })
       .from(pullRequests)
       .where(and(eq(pullRequests.repoId, repoId), eq(pullRequests.state, "open")));
+
+    const githubOpenPrNumbers = new Set(openPrs.map((pr) => pr.number));
+    const staleOpenPrNumbers = existingOpenRows
+      .filter((row) => !githubOpenPrNumbers.has(row.githubPrNumber))
+      .map((row) => row.githubPrNumber);
+
+    if (staleOpenPrNumbers.length > 0) {
+      await db
+        .delete(pullRequests)
+        .where(
+          and(
+            eq(pullRequests.repoId, repoId),
+            inArray(pullRequests.githubPrNumber, staleOpenPrNumbers),
+          ),
+        );
+
+      existingOpenRows = await db
+        .select({
+          id: pullRequests.id,
+          githubPrNumber: pullRequests.githubPrNumber,
+          updatedAt: pullRequests.updatedAt,
+          filteredOut: pullRequests.filteredOut,
+        })
+        .from(pullRequests)
+        .where(and(eq(pullRequests.repoId, repoId), eq(pullRequests.state, "open")));
+    }
 
     const existingByNumber = new Map(
       existingOpenRows.map((row) => [row.githubPrNumber, row] as const),
