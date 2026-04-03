@@ -79,6 +79,7 @@ function contributorTrustFromMergedPrCount(mergedPrCount: number): number {
 }
 
 function buildAnalysisInputHash(params: {
+  modelName: string;
   promptVersion: string;
   contentHash: string;
   linkedIssuePayload: Array<{ title: string; body: string }>;
@@ -89,6 +90,7 @@ function buildAnalysisInputHash(params: {
   return createHash("sha256")
     .update(
       JSON.stringify({
+        modelName: params.modelName,
         promptVersion: params.promptVersion,
         contentHash: params.contentHash,
         linkedIssuePayload: params.linkedIssuePayload,
@@ -521,6 +523,7 @@ async function analyzePrInternal(prId: number) {
   assert(snapshotRows.length === 1, `Missing pr_detail_snapshots row for prId=${prId}`);
   const snapshot = snapshotRows[0];
   const inputHash = buildAnalysisInputHash({
+    modelName: LLM_MODEL_NAME,
     promptVersion: LLM_PROMPT_VERSION,
     contentHash: row.features.contentHash,
     linkedIssuePayload: linkedIssueRows.map((item) => ({
