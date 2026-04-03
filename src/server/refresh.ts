@@ -18,7 +18,7 @@ import {
   repos,
 } from "@/lib/db/schema";
 import { extractFeatures, countHumanComments } from "@/lib/features";
-import { analyzeWithLlm, LLM_PROMPT_VERSION } from "@/lib/llm";
+import { analyzeWithLlm, LLM_MODEL_NAME, LLM_PROMPT_VERSION } from "@/lib/llm";
 import { mergeBotUsers } from "@/lib/bot-users";
 import {
   fetchAuthorMergedPrCount,
@@ -597,7 +597,7 @@ async function analyzePrInternal(prId: number) {
       guidelineFitScore: scoreFromDimensionMap(dimensionScores, "guidelineFit"),
       dimensionScoresJson: dimensionScores,
       dimensionExplanationsJson: dimensionExplanations,
-      modelName: "gemini-2.5-flash",
+      modelName: LLM_MODEL_NAME,
       promptVersion: LLM_PROMPT_VERSION,
       inputHash,
       updatedAt: new Date(),
@@ -616,7 +616,7 @@ async function analyzePrInternal(prId: number) {
         guidelineFitScore: scoreFromDimensionMap(dimensionScores, "guidelineFit"),
         dimensionScoresJson: dimensionScores,
         dimensionExplanationsJson: dimensionExplanations,
-        modelName: "gemini-2.5-flash",
+        modelName: LLM_MODEL_NAME,
         promptVersion: LLM_PROMPT_VERSION,
         inputHash,
         updatedAt: new Date(),

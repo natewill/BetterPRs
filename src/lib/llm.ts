@@ -5,6 +5,7 @@ import type { LlmAnalysis } from "@/lib/types";
 import { llmAnalysisSchema } from "@/lib/types";
 
 export const LLM_PROMPT_VERSION = "v8";
+export const LLM_MODEL_NAME = "gemini-3.1-flash-lite-preview";
 
 type AnalyzeInput = {
   title: string;
@@ -186,7 +187,7 @@ export async function analyzeWithLlm(input: AnalyzeInput): Promise<LlmAnalysis> 
   for (let attempt = 0; attempt < 2; attempt += 1) {
     const response = await Promise.race([
       ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: LLM_MODEL_NAME,
         contents: prompt,
         config: {
           responseMimeType: "application/json",
