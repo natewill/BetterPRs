@@ -5,7 +5,7 @@ import type { LlmAnalysis } from "@/lib/types";
 import { llmAnalysisSchema } from "@/lib/types";
 
 export const LLM_PROMPT_VERSION = "v8";
-export const LLM_MODEL_NAME = "gemini-3.1-flash-lite-preview";
+export const LLM_MODEL_NAME = "gemini-2.5-flash-lite";
 
 type AnalyzeInput = {
   title: string;
